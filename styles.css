@@ -1,0 +1,34 @@
+body {
+    font-family: Tahoma, Verdana, sans-serif;
+}
+
+#board {
+    display: flex;
+    overflow-x: auto;
+}
+
+.round {
+    border-radius: 6px;
+}
+
+.add-new {
+    display: block;
+    background-color: #80808099;
+}
+
+.add-new:hover {
+    cursor: pointer;
+}
+
+.add-new > i {
+    font-size: 22px;
+    padding: 1rem;
+}
+
+.lane {
+    background-color: grey;
+}
+
+.card {
+    background-color: lightgrey;
+}
