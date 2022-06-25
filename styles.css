@@ -11,17 +11,59 @@ body {
     border-radius: 6px;
 }
 
+.hidden {
+    visibility: hidden;
+    opacity: 0;
+    max-width: 0;
+    max-height: 0;
+    /* transition: max-width 0.2s ease;
+    transition: max-height 0.2s ease; */
+}
+
+.visible {
+    visibility: visible;
+    opacity: 1;
+    max-width: 1000px;
+    max-height: 1000px;
+    /* transition: max-width 0.2s ease;
+    transition: max-height 0.2s ease; */
+}
+
+i.hidden {
+    line-height: 0 !important;
+    font-size: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Add buttons */
 .add-new {
     display: block;
     background-color: #80808099;
+    font-size: 0;
 }
 
 .add-new:hover {
     cursor: pointer;
 }
 
+.add-new > form {
+    display: inline-block;
+    border: none;
+    transition: all 0.2s;
+}
+
+.add-new > form > input {
+    margin: 1rem;
+}
+
 .add-new > i {
     font-size: 22px;
+    padding: 1rem;
+}
+
+.add-icon {
+    width: 22px;
     padding: 1rem;
 }
 
