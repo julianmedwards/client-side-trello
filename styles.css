@@ -5,6 +5,11 @@ body {
 #board {
     display: flex;
     overflow-x: auto;
+    overflow-y: hidden;
+}
+
+#board > div {
+    margin: 0 0.5rem;
 }
 
 .round {
@@ -16,8 +21,6 @@ body {
     opacity: 0;
     max-width: 0;
     max-height: 0;
-    /* transition: max-width 0.2s ease;
-    transition: max-height 0.2s ease; */
 }
 
 .visible {
@@ -25,8 +28,6 @@ body {
     opacity: 1;
     max-width: 1000px;
     max-height: 1000px;
-    /* transition: max-width 0.2s ease;
-    transition: max-height 0.2s ease; */
 }
 
 i.hidden {
@@ -41,10 +42,6 @@ i.hidden {
     display: block;
     background-color: #80808099;
     font-size: 0;
-}
-
-.add-new:hover {
-    cursor: pointer;
 }
 
 .add-new > form {
@@ -62,15 +59,14 @@ i.hidden {
     padding: 1rem;
 }
 
-.add-icon {
-    width: 22px;
-    padding: 1rem;
+.add-new > i:hover {
+    cursor: pointer;
 }
 
 .lane {
-    background-color: grey;
+    background-color: lightgrey;
 }
 
 .card {
-    background-color: lightgrey;
+    background-color: grey;
 }
