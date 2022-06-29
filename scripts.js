@@ -67,15 +67,26 @@ function toggleAdding(button) {
             )
         })
         activateInput(button.nextElementSibling.lastElementChild, addCard)
-        button.nextElementSibling.firstElementChild.focus()
+        // setTimeout(() => {
+        //     button.nextElementSibling.firstElementChild.focus(), 1000
+        // })
     } else if (button.parentElement.parentElement.id === 'board') {
         toggleVisiblity(button.previousElementSibling)
         toggleIcon(button, icons.plus, icons.times)
         // Should fix this to use a variable board in the argument for
         // the addLane function.
         activateInput(button.previousElementSibling.firstElementChild, addLane)
-        button.previousElementSibling.firstElementChild.focus()
+        setTimeout(function () {
+            button.previousElementSibling.firstElementChild.focus(), 5000
+        })
     }
+    setTimeout(function () {
+        if (button.parentElement.parentElement.classList.contains('lane')) {
+            button.nextElementSibling.firstElementChild.focus()
+        } else {
+            button.previousElementSibling.firstElementChild.focus()
+        }
+    }, 100)
 }
 
 function addLane(input) {
@@ -186,7 +197,42 @@ function editLane(btn) {
 function delLane(btn) {
     let msg = 'Are you sure you want to delete this swim lane?'
     if (confirm(msg)) {
-        btn.parentElement.parentElement.parentElement.remove()
+        let currLane = btn.parentElement.parentElement.parentElement
+        let cards = currLane.querySelector('.card-container').children
+        let lanes = document.getElementById('board').querySelectorAll('.lane')
+        if (cards.length > 0 && lanes.length > 1) {
+            let msg2 =
+                'Would you like to move your cards to another lane before deleting?'
+            if (confirm(msg2)) {
+                selectLane = prompt(
+                    "Enter a number for the lane you'd like to move the cards to. (left-to-right)"
+                )
+                if (lanes[selectLane - 1]) {
+                    if (lanes[selectLane - 1] == currLane) {
+                        alert(
+                            "Please select a lane other than the one you're deleting."
+                        )
+                    } else {
+                        for (let i = 0; cards[i] != null; ) {
+                            lanes[selectLane - 1]
+                                .querySelector('.card-container')
+                                .append(cards[i])
+                        }
+                        currLane.remove()
+                    }
+                } else {
+                    alert(
+                        'No lane for ' +
+                            selectLane +
+                            ". If you'd like to move the cards to the leftmost lane, enter '1', and so on."
+                    )
+                }
+            } else {
+                btn.parentElement.parentElement.parentElement.remove()
+            }
+        } else {
+            btn.parentElement.parentElement.parentElement.remove()
+        }
     } else console.log('Lane delete aborted.')
 }
 
