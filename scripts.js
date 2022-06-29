@@ -12,6 +12,7 @@ const BoardObj = function () {
     this.buttons = initBtns(this)
     this.activateInput = activateInput
     this.moveLane = moveLane
+    this.editLane = editLane
 }
 
 function initBtns(board) {
@@ -73,23 +74,25 @@ function addLane(input) {
 
         let buttons = document.createElement('div')
         buttons.classList.add('lane-btns')
-        let movRight = document.createElement('i')
-        movRight.setAttribute('name', 'right')
-        movRight.classList.add('fas', 'fa-angle-right')
-        let movLeft = document.createElement('i')
-        movLeft.setAttribute('name', 'left')
-        movLeft.classList.add('fas', 'fa-angle-left')
+        let rightIcon = document.createElement('i')
+        rightIcon.setAttribute('name', 'right')
+        rightIcon.classList.add('fas', 'fa-angle-right')
+        let leftIcon = document.createElement('i')
+        leftIcon.setAttribute('name', 'left')
+        leftIcon.classList.add('fas', 'fa-angle-left')
         let midIcons = document.createElement('div')
-        let editLane = document.createElement('i')
-        editLane.classList.add('fas', 'fa-edit')
-        let delLane = document.createElement('i')
-        delLane.classList.add('fas', 'fa-trash-alt')
-        midIcons.append(editLane, delLane)
-        buttons.append(movLeft, midIcons, movRight)
+        let editIcon = document.createElement('i')
+        editIcon.classList.add('fas', 'fa-edit')
+        let delIcon = document.createElement('i')
+        delIcon.classList.add('fas', 'fa-trash-alt')
+        midIcons.append(editIcon, delIcon)
+        buttons.append(leftIcon, midIcons, rightIcon)
         newLane.append(buttons)
 
-        activateButton(movRight, moveLane)
-        activateButton(movLeft, moveLane)
+        activateButton(rightIcon, moveLane)
+        activateButton(leftIcon, moveLane)
+        activateButton(editIcon, editLane)
+        activateButton(delIcon, delLane)
 
         let laneHead = document.createElement('div')
         laneHead.classList.add('lane-head')
@@ -126,12 +129,33 @@ function moveLane(moveBtn) {
     }
 }
 
-function editLane() {}
+function editLane(btn) {
+    let headDiv = btn.parentElement.parentElement.nextElementSibling
+    let headEl = headDiv.firstElementChild
+    headEl.style.display = 'none'
+    let name = headEl.textContent
 
-function delLane() {}
+    let input = document.createElement('input')
+    input.type = 'text'
+    input.value = name
+
+    activateInput(input, () => {
+        replaceText(input, headEl)
+    })
+    headDiv.append(input)
+    input.focus()
+}
+
+function delLane(btn) {}
 
 function addCard() {
     console.log('Add a card!')
+}
+
+function replaceText(input, textEl) {
+    textEl.textContent = input.value
+    textEl.style.display = 'initial'
+    input.remove()
 }
 
 function toggleVisiblity(element) {

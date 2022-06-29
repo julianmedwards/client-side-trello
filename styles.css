@@ -94,7 +94,7 @@ i.hidden {
     width: 225px;
 }
 
-.lane-head > p {
+.lane-head > * {
     margin: 0.25rem 1rem 0.5rem;
 }
 
