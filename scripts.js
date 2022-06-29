@@ -198,20 +198,33 @@ function addCard(descrInput) {
 
         let buttons = document.createElement('div')
         buttons.classList.add('editing-buttons')
-        let rightIcon = document.createElement('i')
-        rightIcon.setAttribute('name', 'right')
-        rightIcon.classList.add('fas', 'fa-angle-right')
         let leftIcon = document.createElement('i')
         leftIcon.setAttribute('name', 'left')
         leftIcon.classList.add('fas', 'fa-angle-left')
+        let upIcon = document.createElement('i')
+        upIcon.setAttribute('name', 'up')
+        upIcon.classList.add('fas', 'fa-angle-up')
+        let downIcon = document.createElement('i')
+        downIcon.setAttribute('name', 'down')
+        downIcon.classList.add('fas', 'fa-angle-down')
+        let rightIcon = document.createElement('i')
+        rightIcon.setAttribute('name', 'right')
+        rightIcon.classList.add('fas', 'fa-angle-right')
         let editIcon = document.createElement('i')
         editIcon.classList.add('fas', 'fa-edit')
         let delIcon = document.createElement('i')
         delIcon.classList.add('fas', 'fa-trash-alt')
         let midIcons = document.createElement('div')
         midIcons.append(editIcon, delIcon)
-        buttons.append(leftIcon, midIcons, rightIcon)
+        buttons.append(leftIcon, upIcon, midIcons, downIcon, rightIcon)
         newCard.append(buttons)
+
+        activateButton(leftIcon, moveCard)
+        activateButton(rightIcon, moveCard)
+        activateButton(upIcon, moveCard)
+        activateButton(downIcon, moveCard)
+        activateButton(editIcon, editCard)
+        activateButton(delIcon, delCard)
 
         let cardHead = document.createElement('div')
         cardHead.classList.add('card-head')
@@ -230,9 +243,57 @@ function addCard(descrInput) {
         cardContainer.append(newCard)
 
         toggleAdding(descrInput.parentElement.previousElementSibling)
+        descrInput.parentElement.reset()
     } else {
         alert('Please add a name to create a card.')
     }
+}
+
+function moveCard(btn) {
+    let card = btn.parentElement.parentElement
+    switch (btn.getAttribute('name')) {
+        case 'up':
+            let prevCard = card.previousElementSibling
+            if (prevCard) {
+                prevCard.before(card)
+            } else {
+                console.log('Card already at top.')
+            }
+            break
+        case 'down':
+            let nextCard = card.nextElementSibling
+            if (nextCard) {
+                nextCard.after(card)
+            } else {
+                console.log('Card already at bottom.')
+            }
+            break
+        case 'left':
+            let prevLane =
+                card.parentElement.parentElement.previousElementSibling
+            if (prevLane && prevLane.classList.contains('lane')) {
+                let prevLaneCards = prevLane.querySelector('.card-container')
+                prevLaneCards.append(card)
+            } else {
+                console.log('No lane on the left to move card to.')
+            }
+            break
+        case 'right':
+            let nextLane = card.parentElement.parentElement.nextElementSibling
+            if (nextLane && nextLane.classList.contains('lane')) {
+                let nextLaneCards = nextLane.querySelector('.card-container')
+                nextLaneCards.append(card)
+            } else {
+                console.log('No lane on the right to move card to.')
+            }
+            break
+    }
+}
+function editCard(btn) {
+    console.log('edit card')
+}
+function delCard(btn) {
+    console.log('Del card')
 }
 
 function replaceText(input, textEl) {
