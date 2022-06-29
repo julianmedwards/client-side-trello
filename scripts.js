@@ -6,7 +6,7 @@ const icons = {
 const BoardObj = function () {
     this.boardDiv = document.getElementById('board')
     this.lanes = {}
-    this.toggleAddingLane = toggleAddingLane
+    this.toggleAdding = toggleAdding
     this.addLane = addLane
     this.addCard = addCard
     this.buttons = initBtns(this)
@@ -20,7 +20,7 @@ function initBtns(board) {
     for (let button of buttons) {
         if ((button.parentElement = board.boardDiv)) {
             button.lastElementChild.addEventListener('click', function () {
-                board.toggleAddingLane(this)
+                board.toggleAdding(this)
             })
         } else {
             button.addEventListener('click', board.addCard)
@@ -41,6 +41,12 @@ function activateInput(element, funct) {
     }
 }
 
+function advanceCursor(currInput) {
+    if ((currInput.nextElementSibling.tagName = 'input')) {
+        currInput.nextElementSibling.focus()
+    }
+}
+
 function activateButton(element, funct) {
     if (!element.getAttribute('data-type-click')) {
         element.setAttribute('data-type-click', funct.name)
@@ -50,16 +56,23 @@ function activateButton(element, funct) {
     }
 }
 
-function toggleAddingLane(button) {
-    toggleVisiblity(button.previousElementSibling)
-    button.previousElementSibling.firstElementChild.focus()
-    toggleIcon(button, icons.plus, icons.times)
-    // Should fix this to use a variable board in the argument for
-    // the addLane function.
-    activateInput(
-        button.previousElementSibling.firstElementChild,
-        board01.addLane
-    )
+function toggleAdding(button) {
+    if (button.parentElement.parentElement.classList.contains('lane')) {
+        toggleVisiblity(button.nextElementSibling)
+        toggleIcon(button, icons.plus, icons.times)
+        activateInput(button.nextElementSibling.firstElementChild, () => {
+            advanceCursor(button.nextElementSibling.firstElementChild)
+        })
+        activateInput(button.nextElementSibling.lastElementChild, addCard)
+        button.nextElementSibling.firstElementChild.focus()
+    } else if (button.parentElement.parentElement.id === 'board') {
+        toggleVisiblity(button.previousElementSibling)
+        toggleIcon(button, icons.plus, icons.times)
+        // Should fix this to use a variable board in the argument for
+        // the addLane function.
+        activateInput(button.previousElementSibling.firstElementChild, addLane)
+        button.previousElementSibling.firstElementChild.focus()
+    }
 }
 
 function addLane(input) {
@@ -73,18 +86,18 @@ function addLane(input) {
         input.parentElement.parentElement.before(newLane)
 
         let buttons = document.createElement('div')
-        buttons.classList.add('lane-btns')
+        buttons.classList.add('editing-buttons')
         let rightIcon = document.createElement('i')
         rightIcon.setAttribute('name', 'right')
         rightIcon.classList.add('fas', 'fa-angle-right')
         let leftIcon = document.createElement('i')
         leftIcon.setAttribute('name', 'left')
         leftIcon.classList.add('fas', 'fa-angle-left')
-        let midIcons = document.createElement('div')
         let editIcon = document.createElement('i')
         editIcon.classList.add('fas', 'fa-edit')
         let delIcon = document.createElement('i')
         delIcon.classList.add('fas', 'fa-trash-alt')
+        let midIcons = document.createElement('div')
         midIcons.append(editIcon, delIcon)
         buttons.append(leftIcon, midIcons, rightIcon)
         newLane.append(buttons)
@@ -101,12 +114,32 @@ function addLane(input) {
         laneHead.append(laneTitle)
         newLane.append(laneHead)
 
+        let cardContainer = document.createElement('div')
+        cardContainer.classList.add('card-container', 'round')
+        newLane.append(cardContainer)
+
         let addCardBtn = document.createElement('div')
         addCardBtn.classList.add('add-new', 'round')
         addCardBtn.setAttribute('name', 'add-btn')
+        let addCardIcon = document.createElement('i')
+        addCardIcon.classList.add('fas', 'fa-plus')
+        addCardIcon.setAttribute('name', 'add-icon')
+        let addCardForm = document.createElement('form')
+        addCardForm.classList.add('hidden')
+        addCardForm.setAttribute('name', 'add-form')
+        addCardForm.setAttribute('onsubmit', 'return false')
+        let addCardName = document.createElement('input')
+        addCardName.setAttribute('placeholder', 'Name your card.')
+        let addCardDescr = document.createElement('input')
+        addCardDescr.setAttribute('placeholder', 'Add a card description.')
+
+        addCardForm.append(addCardName, addCardDescr)
+        addCardBtn.append(addCardIcon, addCardForm)
         newLane.append(addCardBtn)
 
-        toggleAddingLane(input.parentElement.nextElementSibling)
+        activateButton(addCardIcon, toggleAdding)
+
+        toggleAdding(input.parentElement.nextElementSibling)
     } else {
         alert('Please add a name to create a new lane.')
     }
@@ -153,13 +186,58 @@ function delLane(btn) {
     } else console.log('Lane delete aborted.')
 }
 
-function addCard() {
-    console.log('Add a card!')
+function addCard(descrInput) {
+    let cardName = descrInput.previousElementSibling.value
+    if (cardName != '') {
+        let cardDescr = descrInput.value
+        let cardContainer =
+            descrInput.parentElement.parentElement.previousElementSibling
+
+        let newCard = document.createElement('div')
+        newCard.classList.add('card', 'round')
+
+        let buttons = document.createElement('div')
+        buttons.classList.add('editing-buttons')
+        let rightIcon = document.createElement('i')
+        rightIcon.setAttribute('name', 'right')
+        rightIcon.classList.add('fas', 'fa-angle-right')
+        let leftIcon = document.createElement('i')
+        leftIcon.setAttribute('name', 'left')
+        leftIcon.classList.add('fas', 'fa-angle-left')
+        let editIcon = document.createElement('i')
+        editIcon.classList.add('fas', 'fa-edit')
+        let delIcon = document.createElement('i')
+        delIcon.classList.add('fas', 'fa-trash-alt')
+        let midIcons = document.createElement('div')
+        midIcons.append(editIcon, delIcon)
+        buttons.append(leftIcon, midIcons, rightIcon)
+        newCard.append(buttons)
+
+        let cardHead = document.createElement('div')
+        cardHead.classList.add('card-head')
+        let cardTitle = document.createElement('p')
+        cardTitle.textContent = cardName
+
+        let cardBody = document.createElement('div')
+        cardBody.classList.add('card-body')
+        let cardDescrEl = document.createElement('p')
+        cardDescrEl.textContent = cardDescr
+
+        cardHead.append(cardTitle)
+        cardBody.append(cardDescrEl)
+        newCard.append(cardHead, cardBody)
+
+        cardContainer.append(newCard)
+
+        toggleAdding(descrInput.parentElement.previousElementSibling)
+    } else {
+        alert('Please add a name to create a card.')
+    }
 }
 
 function replaceText(input, textEl) {
     textEl.textContent = input.value
-    textEl.style.display = 'initial'
+    textEl.style.display = 'revert'
     input.remove()
 }
 

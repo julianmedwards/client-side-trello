@@ -12,6 +12,11 @@ main {
     min-height: calc(100vh - 71px);
 }
 
+input {
+    border: none;
+    padding: 3px 6px;
+}
+
 #board {
     display: flex;
     overflow-x: auto;
@@ -33,6 +38,12 @@ main {
     max-height: 0;
 }
 
+.hidden * {
+    font-size: 0;
+    padding: 0;
+    margin: 0;
+}
+
 .visible {
     visibility: visible;
     opacity: 1;
@@ -40,17 +51,10 @@ main {
     max-height: 1000px;
 }
 
-i.hidden {
-    line-height: 0 !important;
-    font-size: 0 !important;
-    padding: 0 !important;
-    margin: 0 !important;
-}
-
 /* Add buttons */
 .add-new {
     display: block;
-    background-color: #80808099;
+    background-color: #294c6099;
     font-size: 0;
 }
 
@@ -60,8 +64,10 @@ i.hidden {
     transition: all 0.2s;
 }
 
-.add-new > form > input {
+.add-new input {
+    transition: all 0.2s;
     margin: 1rem;
+    font-size: 13px;
 }
 
 .add-new > i {
@@ -73,33 +79,73 @@ i.hidden {
     cursor: pointer;
 }
 
+.lane form {
+    display: block;
+}
+
+.lane input {
+    margin: 0 0.35rem 0.35rem 0.35rem;
+}
+
+.lane .add-new > i {
+    font-size: 16px;
+    padding: 0.5rem;
+}
+
 /* Lane buttons */
-.lane-btns {
+.editing-buttons {
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-between;
-    margin: 0.25rem 1rem;
+    margin: 0;
+    padding: 0.25rem 1rem;
 }
 
-.lane-btns i:hover {
+.editing-buttons i:hover {
     cursor: pointer;
 }
 
-.lane-btns > div > i {
-    margin: 0 0.5rem;
+.editing-buttons > div > i {
+    margin: 0;
+    padding: 0 0.5rem;
 }
 
 .lane {
-    background-color: lightgrey;
+    background-color: #e0e0e0;
     width: 225px;
 }
 
 .lane-head > * {
-    margin: 0.25rem 1rem 0.5rem;
+    font-weight: 500;
+    margin: 0;
+    padding: 0.25rem 1rem 0.5rem;
+}
+
+.lane > .add-new {
+    background-color: #294c6040;
+    margin: 0.35rem 0.5rem;
 }
 
 .card {
-    background-color: grey;
+    background-color: #ffffff;
+    margin: 0 0.5rem 0.35rem 0.5rem;
+    border-bottom: 2px solid #0000004d;
+    border-right: 1px solid #0000004d;
+}
+
+.card > .editing-buttons {
+    font-size: 14px;
+}
+
+.card-head > * {
+    margin: 0;
+    padding: 0.25rem 1rem 0.25rem;
+}
+
+.card-body > * {
+    font-size: 14px;
+    margin: 0;
+    padding: 0.25rem 1rem 0.5rem 1.5rem;
 }
 
 footer {
