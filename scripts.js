@@ -11,6 +11,7 @@ const BoardObj = function () {
     this.addCard = addCard
     this.buttons = initBtns(this)
     this.activateInput = activateInput
+    this.moveLane = moveLane
 }
 
 function initBtns(board) {
@@ -29,12 +30,21 @@ function initBtns(board) {
 
 function activateInput(element, funct) {
     if (!element.getAttribute('data-type-keypress')) {
-        element.setAttribute('data-type-keypress', 'addLane')
+        element.setAttribute('data-type-keypress', funct.name)
         element.addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
                 console.log('Enter pressed')
                 funct(this)
             }
+        })
+    }
+}
+
+function activateButton(element, funct) {
+    if (!element.getAttribute('data-type-click')) {
+        element.setAttribute('data-type-click', funct.name)
+        element.addEventListener('click', () => {
+            funct(element)
         })
     }
 }
@@ -51,19 +61,38 @@ function toggleAddingLane(button) {
     )
 }
 
-// Issue: If you mash enter while creating a lane it'll attempt to register
-// the enter input and create a lane after it's reset the input but before
-// the input is hidden/not in focus.
 function addLane(input) {
     console.log('Adding a lane!')
     let laneName = input.value
     if (laneName !== '') {
         input.parentElement.reset()
+
         let newLane = document.createElement('div')
         newLane.classList.add('lane', 'round')
         input.parentElement.parentElement.before(newLane)
 
+        let buttons = document.createElement('div')
+        buttons.classList.add('lane-btns')
+        let movRight = document.createElement('i')
+        movRight.setAttribute('name', 'right')
+        movRight.classList.add('fas', 'fa-angle-right')
+        let movLeft = document.createElement('i')
+        movLeft.setAttribute('name', 'left')
+        movLeft.classList.add('fas', 'fa-angle-left')
+        let midIcons = document.createElement('div')
+        let editLane = document.createElement('i')
+        editLane.classList.add('fas', 'fa-edit')
+        let delLane = document.createElement('i')
+        delLane.classList.add('fas', 'fa-trash-alt')
+        midIcons.append(editLane, delLane)
+        buttons.append(movLeft, midIcons, movRight)
+        newLane.append(buttons)
+
+        activateButton(movRight, moveLane)
+        activateButton(movLeft, moveLane)
+
         let laneHead = document.createElement('div')
+        laneHead.classList.add('lane-head')
         let laneTitle = document.createElement('p')
         laneTitle.textContent = laneName
         laneHead.append(laneTitle)
@@ -79,6 +108,27 @@ function addLane(input) {
         alert('Please add a name to create a new lane.')
     }
 }
+
+function moveLane(moveBtn) {
+    let lane = moveBtn.parentElement.parentElement
+    if (moveBtn.getAttribute('name') === 'left') {
+        let prev = lane.previousElementSibling
+        if (prev) {
+            lane.previousElementSibling.before(lane)
+        } else {
+            console.log('Lane is already at beginning of list.')
+        }
+    } else {
+        let next = lane.nextElementSibling
+        if (!next.getAttribute('name', 'add-btn')) {
+            next.after(lane)
+        } else console.log('Lane has reached end of list.')
+    }
+}
+
+function editLane() {}
+
+function delLane() {}
 
 function addCard() {
     console.log('Add a card!')

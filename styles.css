@@ -1,5 +1,15 @@
 body {
+    margin: 0;
     font-family: Tahoma, Verdana, sans-serif;
+}
+
+header > h1 {
+    margin: 0;
+    padding: 1rem 0;
+}
+
+main {
+    min-height: calc(100vh - 71px);
 }
 
 #board {
@@ -63,10 +73,37 @@ i.hidden {
     cursor: pointer;
 }
 
+/* Lane buttons */
+.lane-btns {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    margin: 0.25rem 1rem;
+}
+
+.lane-btns i:hover {
+    cursor: pointer;
+}
+
+.lane-btns > div > i {
+    margin: 0 0.5rem;
+}
+
 .lane {
     background-color: lightgrey;
+    width: 225px;
+}
+
+.lane-head > p {
+    margin: 0.25rem 1rem 0.5rem;
 }
 
 .card {
     background-color: grey;
+}
+
+footer {
+    width: 100%;
+    height: 100px;
+    background: paleturquoise;
 }
