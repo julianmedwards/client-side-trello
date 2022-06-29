@@ -41,10 +41,10 @@ function activateInput(element, funct) {
     }
 }
 
-function advanceCursor(currInput) {
-    if ((currInput.nextElementSibling.tagName = 'input')) {
-        currInput.nextElementSibling.focus()
-    }
+function advanceCursor(currInput, form) {
+    let formEls = Array.from(form)
+    let currIndex = formEls.indexOf(currInput)
+    formEls[currIndex + 1].focus()
 }
 
 function activateButton(element, funct) {
@@ -61,7 +61,10 @@ function toggleAdding(button) {
         toggleVisiblity(button.nextElementSibling)
         toggleIcon(button, icons.plus, icons.times)
         activateInput(button.nextElementSibling.firstElementChild, () => {
-            advanceCursor(button.nextElementSibling.firstElementChild)
+            advanceCursor(
+                button.nextElementSibling.firstElementChild,
+                button.nextElementSibling
+            )
         })
         activateInput(button.nextElementSibling.lastElementChild, addCard)
         button.nextElementSibling.firstElementChild.focus()
@@ -164,6 +167,7 @@ function moveLane(moveBtn) {
 
 function editLane(btn) {
     let headDiv = btn.parentElement.parentElement.nextElementSibling
+
     let headEl = headDiv.firstElementChild
     headEl.style.display = 'none'
     let name = headEl.textContent
@@ -173,7 +177,7 @@ function editLane(btn) {
     input.value = name
 
     activateInput(input, () => {
-        replaceText(input, headEl)
+        replaceText(input, headEl, headEl)
     })
     headDiv.append(input)
     input.focus()
@@ -290,16 +294,57 @@ function moveCard(btn) {
     }
 }
 function editCard(btn) {
-    console.log('edit card')
+    let headDiv = btn.parentElement.parentElement.nextElementSibling
+    let bodyDiv = headDiv.nextElementSibling
+    headDiv.style.display = 'none'
+    bodyDiv.style.display = 'none'
+
+    let headEl = headDiv.firstElementChild
+    let bodyEl = bodyDiv.firstElementChild
+
+    let name = headEl.textContent
+    let descr = bodyEl.textContent
+
+    let editForm = document.createElement('form')
+    editForm.setAttribute('onsubmit', 'return false')
+    let nameInput = document.createElement('input')
+    nameInput.type = 'text'
+    nameInput.value = name
+    let descrInput = document.createElement('input')
+    descrInput.type = 'text'
+    descrInput.value = descr
+
+    editForm.append(nameInput, descrInput)
+
+    activateInput(nameInput, () => {
+        advanceCursor(nameInput, nameInput.parentElement)
+    })
+    activateInput(descrInput, () => {
+        replaceText(
+            [nameInput, descrInput],
+            [headEl, bodyEl],
+            [headDiv, bodyDiv]
+        )
+    })
+    headDiv.before(editForm)
+    nameInput.focus()
 }
 function delCard(btn) {
     console.log('Del card')
 }
 
-function replaceText(input, textEl) {
-    textEl.textContent = input.value
-    textEl.style.display = 'revert'
-    input.remove()
+function replaceText(input, textEl, hiddenEl) {
+    if (Array.isArray(input)) {
+        for (let i = 0; i < input.length; i++) {
+            textEl[i].textContent = input[i].value
+            hiddenEl[i].style.display = ''
+            input[i].remove()
+        }
+    } else {
+        textEl.textContent = input.value
+        hiddenEl.style.display = ''
+        input.remove()
+    }
 }
 
 function toggleVisiblity(element) {

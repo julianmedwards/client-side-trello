@@ -137,15 +137,21 @@ input {
     font-size: 14px;
 }
 
-.card-head > * {
+.card-head > p {
     margin: 0;
     padding: 0.25rem 1rem 0.25rem;
 }
 
-.card-body > * {
+.card-body > p {
     font-size: 14px;
     margin: 0;
     padding: 0.25rem 1rem 0.5rem 1.5rem;
+}
+
+.card-head > input,
+.card-body > input {
+    border: 1px solid #0000004d;
+    border-radius: 4px;
 }
 
 footer {
