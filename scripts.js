@@ -330,7 +330,10 @@ function editCard(btn) {
     nameInput.focus()
 }
 function delCard(btn) {
-    console.log('Del card')
+    let msg = 'Are you sure you want to delete this card?'
+    if (confirm(msg)) {
+        btn.parentElement.parentElement.parentElement.remove()
+    } else console.log('Card delete aborted.')
 }
 
 function replaceText(input, textEl, hiddenEl) {
