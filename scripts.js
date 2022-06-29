@@ -146,7 +146,12 @@ function editLane(btn) {
     input.focus()
 }
 
-function delLane(btn) {}
+function delLane(btn) {
+    let msg = 'Are you sure you want to delete this swim lane?'
+    if (confirm(msg)) {
+        btn.parentElement.parentElement.parentElement.remove()
+    } else console.log('Lane delete aborted.')
+}
 
 function addCard() {
     console.log('Add a card!')
