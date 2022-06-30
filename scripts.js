@@ -5,14 +5,8 @@ const icons = {
 
 const BoardObj = function () {
     this.boardDiv = document.getElementById('board')
-    this.lanes = {}
     this.toggleAdding = toggleAdding
-    this.addLane = addLane
-    this.addCard = addCard
     this.buttons = initBtns(this)
-    this.activateInput = activateInput
-    this.moveLane = moveLane
-    this.editLane = editLane
 }
 
 function initBtns(board) {
@@ -23,10 +17,19 @@ function initBtns(board) {
                 board.toggleAdding(this)
             })
         } else {
-            button.addEventListener('click', board.addCard)
+            button.addEventListener('click', addCard)
         }
     }
     return buttons
+}
+
+function activateButton(element, funct) {
+    if (!element.getAttribute('data-type-click')) {
+        element.setAttribute('data-type-click', funct.name)
+        element.addEventListener('click', () => {
+            funct(element)
+        })
+    }
 }
 
 function activateInput(element, funct) {
@@ -47,12 +50,37 @@ function advanceCursor(currInput, form) {
     formEls[currIndex + 1].focus()
 }
 
-function activateButton(element, funct) {
-    if (!element.getAttribute('data-type-click')) {
-        element.setAttribute('data-type-click', funct.name)
-        element.addEventListener('click', () => {
-            funct(element)
-        })
+function replaceText(input, textEl, hiddenEl) {
+    if (Array.isArray(input)) {
+        for (let i = 0; i < input.length; i++) {
+            textEl[i].textContent = input[i].value
+            hiddenEl[i].style.display = ''
+            input[i].remove()
+        }
+    } else {
+        textEl.textContent = input.value
+        hiddenEl.style.display = ''
+        input.remove()
+    }
+}
+
+function toggleVisiblity(element) {
+    if (
+        element.classList.contains('hidden') ||
+        element.classList.contains('visible')
+    ) {
+        element.classList.toggle('hidden')
+        element.classList.toggle('visible')
+    } else {
+        element.classList.add('hidden')
+    }
+}
+
+function toggleIcon(iconEl, initIcon, altIcon) {
+    if (iconEl.classList.contains(initIcon)) {
+        iconEl.classList.replace(initIcon, altIcon)
+    } else {
+        iconEl.classList.replace(altIcon, initIcon)
     }
 }
 
@@ -67,19 +95,12 @@ function toggleAdding(button) {
             )
         })
         activateInput(button.nextElementSibling.lastElementChild, addCard)
-        // setTimeout(() => {
-        //     button.nextElementSibling.firstElementChild.focus(), 1000
-        // })
     } else if (button.parentElement.parentElement.id === 'board') {
         toggleVisiblity(button.previousElementSibling)
         toggleIcon(button, icons.plus, icons.times)
-        // Should fix this to use a variable board in the argument for
-        // the addLane function.
         activateInput(button.previousElementSibling.firstElementChild, addLane)
-        setTimeout(function () {
-            button.previousElementSibling.firstElementChild.focus(), 5000
-        })
     }
+
     setTimeout(function () {
         if (button.parentElement.parentElement.classList.contains('lane')) {
             button.nextElementSibling.firstElementChild.focus()
@@ -339,6 +360,7 @@ function moveCard(btn) {
             break
     }
 }
+
 function editCard(btn) {
     let headDiv = btn.parentElement.parentElement.nextElementSibling
     let bodyDiv = headDiv.nextElementSibling
@@ -375,45 +397,12 @@ function editCard(btn) {
     headDiv.before(editForm)
     nameInput.focus()
 }
+
 function delCard(btn) {
     let msg = 'Are you sure you want to delete this card?'
     if (confirm(msg)) {
         btn.parentElement.parentElement.parentElement.remove()
     } else console.log('Card delete aborted.')
-}
-
-function replaceText(input, textEl, hiddenEl) {
-    if (Array.isArray(input)) {
-        for (let i = 0; i < input.length; i++) {
-            textEl[i].textContent = input[i].value
-            hiddenEl[i].style.display = ''
-            input[i].remove()
-        }
-    } else {
-        textEl.textContent = input.value
-        hiddenEl.style.display = ''
-        input.remove()
-    }
-}
-
-function toggleVisiblity(element) {
-    if (
-        element.classList.contains('hidden') ||
-        element.classList.contains('visible')
-    ) {
-        element.classList.toggle('hidden')
-        element.classList.toggle('visible')
-    } else {
-        element.classList.add('hidden')
-    }
-}
-
-function toggleIcon(iconEl, initIcon, altIcon) {
-    if (iconEl.classList.contains(initIcon)) {
-        iconEl.classList.replace(initIcon, altIcon)
-    } else {
-        iconEl.classList.replace(altIcon, initIcon)
-    }
 }
 
 const board01 = new BoardObj()
