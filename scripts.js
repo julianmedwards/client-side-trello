@@ -116,16 +116,6 @@ function toggleAdding(button) {
     } else {
         console.error('Unexpected html structure when adding lane or card.')
     }
-
-    // if (button.previousElementSibling.classList.contains('visible')) {
-    //     setTimeout(function () {
-    //         if (button.parentElement.parentElement.classList.contains('lane')) {
-    //             button.nextElementSibling.firstElementChild.focus()
-    //         } else {
-    //             button.previousElementSibling.firstElementChild.focus()
-    //         }
-    //     }, 100)
-    // }
 }
 
 function addLane(input) {
