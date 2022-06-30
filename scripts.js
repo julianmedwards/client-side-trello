@@ -95,23 +95,40 @@ function toggleAdding(button) {
             )
         })
         activateInput(button.nextElementSibling.lastElementChild, addCard)
+        if (button.nextElementSibling.classList.contains('visible')) {
+            setTimeout(function () {
+                button.nextElementSibling.firstElementChild.focus()
+            }, 100)
+        } else {
+            document.activeElement.blur()
+        }
     } else if (button.parentElement.parentElement.id === 'board') {
         toggleVisiblity(button.previousElementSibling)
         toggleIcon(button, icons.plus, icons.times)
         activateInput(button.previousElementSibling.firstElementChild, addLane)
+        if (button.previousElementSibling.classList.contains('visible')) {
+            setTimeout(function () {
+                button.previousElementSibling.firstElementChild.focus()
+            }, 100)
+        } else {
+            document.activeElement.blur()
+        }
+    } else {
+        console.error('Unexpected html structure when adding lane or card.')
     }
 
-    setTimeout(function () {
-        if (button.parentElement.parentElement.classList.contains('lane')) {
-            button.nextElementSibling.firstElementChild.focus()
-        } else {
-            button.previousElementSibling.firstElementChild.focus()
-        }
-    }, 100)
+    // if (button.previousElementSibling.classList.contains('visible')) {
+    //     setTimeout(function () {
+    //         if (button.parentElement.parentElement.classList.contains('lane')) {
+    //             button.nextElementSibling.firstElementChild.focus()
+    //         } else {
+    //             button.previousElementSibling.firstElementChild.focus()
+    //         }
+    //     }, 100)
+    // }
 }
 
 function addLane(input) {
-    console.log('Adding a lane!')
     let laneName = input.value
     if (laneName !== '') {
         input.parentElement.reset()
