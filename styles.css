@@ -56,6 +56,7 @@ input {
     display: block;
     background-color: #294c6099;
     font-size: 0;
+    align-self: start;
 }
 
 .add-new > form {
