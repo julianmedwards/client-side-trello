@@ -1,15 +1,15 @@
 body {
     margin: 0;
-    font-family: Tahoma, Verdana, sans-serif;
+    font-family: 'Open Sans', sans-serif;
 }
 
 header > h1 {
     margin: 0;
-    padding: 1rem 0;
+    padding: 1rem 1.5rem;
 }
 
 main {
-    min-height: calc(100vh - 71px);
+    min-height: calc(100vh - 75px);
 }
 
 input {
@@ -113,6 +113,7 @@ input {
 .lane {
     background-color: #e0e0e0;
     width: 225px;
+    flex-shrink: 0;
 }
 
 .lane-head > * {
